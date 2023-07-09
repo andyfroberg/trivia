@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="card-body mt-5" align="center">
+  <p class="card-text"><h2>Leaderboard - Top Trivia Pro Users</h2></p>
+</div>
+<div class="container mt-5">
+  <div class="row">
+    <div class="col-4">
+      <form method="post">
+        <div class="row">
+          <div class="col">
+            {{ user_filter_form.csrf_token }}
+            {{ user_filter_form.query(class="form-control") }}
+          </div>
+          <div class="col">
+            <button type="submit" class="btn btn-secondary">Search</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+
+<div class="container">
+  <div class="row justify-content-start">
+    
+
+
+    <div>
+
+      <table class="table mb-4">
+
+        <thead>
+          <tr>
+            <th scope="col">No.</th>
+            <th scope="col">Event</th>
+            <th scope="col">Date</th>
+            <th scope="col">Actions</th>
+        </thead>
+        <tbody>
+        {% if users is not none %}
+        {% for user in users %}
+          <tr>
+            <th scope="row">{{ loop.index }}</th>
+            <td>{{ user.username }}</td>
+            <td>{{ user.points }}</td>
+            <td>
+              <form action="{{ url_for('leaderboard') }}" method="GET">
+                <button type="submit" class="btn btn-warning">View Profile</button>
+              </form>
+            </td>
+          </tr>
+          {% endfor %}
+          {% endif %}
+        </tbody>
+        </table>
+  </div>
+
+{% endblock content %} 

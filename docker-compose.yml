@@ -1,0 +1,29 @@
+version: '3.1'
+services:
+  web:
+    image: stax/nginx:test
+    build: ./nginx
+    restart: always
+    ports:
+      - "80:80"
+    depends_on:
+      - app
+    profiles: ['production']
+  app:
+    image: stax/birthday:compose
+    build: ./flask-project
+    restart: always
+    ports:
+      - "8000:8000"
+    command: gunicorn -b 0.0.0.0:8000 app:app
+    profiles: ['production', 'testing']
+  app-debug:
+    image: stax/birthday:test
+    build: ./flask-project
+    restart: always
+    volumes: 
+      - "./flask-project:/local"
+    ports:
+      - "80:5000"
+    command: python3 /local/app.py
+    profiles: ['debug']

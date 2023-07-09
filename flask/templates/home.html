@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% block title %}Home{% endblock title %}
+{% block content %}
+ <style>
+  .hero-container {
+    height: 70vh;
+    background-image: url('https://i.imgur.com/lKp76VZ.jpg');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+  }
+  .hero-sign-up-button {
+    font-size: 1.5em;
+    font-weight: 700;
+    border: none;
+  }
+ </style>
+<div class="hero-container container-fluid m-0 p-0">
+  <div class="col-1"></div>
+  <div class="col-10 p-5 container-fluid">
+    <h1 class="align-items-center fw-bold mt-5 mb-3">Never forget the special occasions in your life.</h1>
+    <h2 class="align-items-center fst-italic">Birthdays</h2>
+    <i class="bi bi-gift"></i>
+    <h2 class="align-items-center fst-italic">Anniversaries</h2>
+    <h2 class="align-items-center fst-italic">Holidays</h2>
+    <h2 class="align-items-center fst-italic">And More!</h2>
+    <a name="sign-up" id="" class="btn btn-primary hero-sign-up-button bg-info mt-4" href="{{ url_for('register') }}" role="button">Sign Up</a>
+  </div>
+  <div class="col-1"></div>
+</div>
+
+  {% endblock content %}
+
+ 
