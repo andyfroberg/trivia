@@ -17,7 +17,7 @@ class PasswordChangeForm(FlaskForm):
     confirmNewPassword = PasswordField('confirmNewPassword', validators=[DataRequired(), EqualTo('newPassword'), Length(min=5, max=50)])
 
 class TriviaAnswerForm(FlaskForm):
-    answer = StringField('answer', validators=[DataRequired(), Length(min=5, max=50)])
+    answer = StringField('answer', validators=[DataRequired(), Length(min=1, max=50)])
 
 class UserFilterForm(FlaskForm):
     query = StringField('query', validators=[Length(min=0, max=50)])

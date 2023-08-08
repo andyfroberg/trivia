@@ -1,4 +1,4 @@
-FROM python:latest
+FROM python:slim-bullseye
 ARG DEBIAN_FRONTEND=noninteractive
 RUN pip3 install --upgrade pip
 COPY requirements.txt requirements.txt

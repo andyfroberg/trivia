@@ -1,2 +1,2 @@
-# birthday
-Birthday reminder app for TCSS 506 at UW Tacoma 
+# Trivia
+Get better at pub trivia
