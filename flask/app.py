@@ -1,12 +1,12 @@
 #!/usr/local/bin/python3
-from flask import Flask, render_template, request, redirect, url_for, session, flash
+from flask import Flask, render_template, request, redirect, url_for, session, flash, jsonify
 from forms import LoginForm, RegisterForm, PasswordChangeForm, TriviaAnswerForm, UserFilterForm
 # from flask_login import login_user, logout_user, login_required, current_user
 import flask_login
 from models import db, login_manager, UserModel, TriviaQuestionModel, load_user #####
 from trivia_db import TriviaDB
 from datetime import datetime
-import requests
+# import requests
 import json
 import os
 from dotenv import load_dotenv
@@ -21,15 +21,88 @@ app = Flask(__name__)
 app.secret_key = os.getenv("FLASK_APP_SECRET_KEY")
 
 # Database configuration
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///../sqlite/trivia.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///trivia.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 # Initialize the database
 db.init_app(app)
 with app.app_context():
     db.create_all()
+    questions = {}
+    try:
+        with open("general_easy_first50.json") as f:
+            questions = json.load(f)
+    except IOError as e:
+        flash("There was an issue loading the database values.", "alert-danger")
+        exit(1)
 
-# db = TriviaDB()
+    for q in questions["results"]:
+        question = TriviaQuestionModel()
+        question.category = q["category"]
+        question.difficulty = q["difficulty"]
+        question.question = q["question"]
+        question.correct_answer = q["correct_answer"]
+        db.session.add(question)
+        db.session.commit()
+
+###############################
+##### HELPER FUNCTIONS ########
+###############################
+# def populate_db(path="general_easy_first50.json"):
+#     questions = {}
+#     try:
+#         with open(path) as f:
+#             questions = json.load(f)
+#             print(questions)
+#     except IOError as e:
+#         flash("There was an issue loading the database values.", "alert-danger")
+#         exit(1)
+
+#     for q in questions["results"]:
+#         question = TriviaQuestionModel()
+#         question.category = q["category"]
+#         question.difficulty = q["difficulty"]
+#         question.question = q["question"]
+#         question.correct_answer = q["correct_answer"]
+#         db.session.add(question)
+#         db.session.commit()
+
+def addUser(email, username, password):
+    user = UserModel()
+    user.set_password(password)
+    user.email = email
+    user.username = username
+    user.score_lifetime = 0
+    db.session.add(user)
+    db.session.commit()
+
+def verify_user_logged_in():
+    logged_in = False
+    username = None
+    if flask_login.current_user.is_authenticated:
+        logged_in = True
+        username = flask_login.current_user.username
+    return logged_in, username
+
+@login_manager.unauthorized_handler
+def handle_unauthorized_login_attempt():
+    form = LoginForm()
+    flash('Please login to access this page', 'alert-danger')
+    return render_template('login.html',form=form)
+
+def load_trivia_question(question_id=None):
+    pass
+
+def get_user_score_current_round():
+    load_user()
+
+def get_user_score_lifetime():
+    pass
+
+def get_user_profile():
+    pass
+
+# populate_db()
 
 # Initialize the login manager
 login_manager.init_app(app)
@@ -157,46 +230,7 @@ def page_not_found(error):
     return render_template('404.html'), 404
 
 
-###############################
-##### HELPER FUNCTIONS ########
-###############################
-def addUser(email, username, password):
-    user = UserModel()
-    user.set_password(password)
-    user.email = email
-    user.username = username
-    user.score_lifetime = 0
-    db.session.add(user)
-    db.session.commit()
-
-def verify_user_logged_in():
-    logged_in = False
-    username = None
-    if flask_login.current_user.is_authenticated:
-        logged_in = True
-        username = flask_login.current_user.username
-    return logged_in, username
-
-@login_manager.unauthorized_handler
-def handle_unauthorized_login_attempt():
-    form = LoginForm()
-    flash('Please login to access this page', 'alert-danger')
-    return render_template('login.html',form=form)
-
-def load_trivia_question(question_id=None):
-    pass
-
-def get_user_score_current_round():
-    load_user()
-
-def get_user_score_lifetime():
-    pass
-
-def get_user_profile():
-    pass
-
-
 if __name__ == '__main__':
     # The host is set to '0.0.0.0' to make the app accessible from any IP address.
     # Default flask port (5000) is used in newer macOS releases for sharing features.
-    app.run(host='0.0.0.0', debug='true', port=5001)  
+    app.run(host='0.0.0.0', debug='false', port=5001)  

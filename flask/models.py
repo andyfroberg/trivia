@@ -29,12 +29,13 @@ class UserModel(flask_login.UserMixin, db.Model):
     
 class TriviaQuestionModel(flask_login.UserMixin, db.Model):
     question_id = db.Column(db.Integer, unique=True, nullable=False, primary_key=True)
+    category = db.Column(db.String(64), nullable=False)
+    difficulty = db.Column(db.String(64), nullable=False)
     question = db.Column(db.String(128), nullable=False)
-    question_category = db.Column(db.String(100), nullable=False)
-    question_answer = db.Column(db.String(128), nullable=False)
-    question_hint = db.Column(db.String(128), nullable=False)
-    question_count_attempted = db.Column(db.Integer)
-    question_count_answered_correctly = db.Column(db.Integer)
+    correct_answer = db.Column(db.String(128), nullable=False)
+    # hint = db.Column(db.String(128), nullable=False)
+    count_attempted = db.Column(db.Integer)
+    count_answered_correctly = db.Column(db.Integer)
     
 
 # @login_manager.user_loader
@@ -44,3 +45,15 @@ class TriviaQuestionModel(flask_login.UserMixin, db.Model):
 @login_manager.user_loader
 def load_user(id):
     return UserModel.query.get(int(id))
+
+
+# "category": "General Knowledge",
+#             "type": "multiple",
+#             "difficulty": "easy",
+#             "question": "Virgin Trains, Virgin Atlantic and Virgin Racing, are all companies owned by which famous entrepreneur?   ",
+#             "correct_answer": "Richard Branson",
+#             "incorrect_answers": [
+#                 "Alan Sugar",
+#                 "Donald Trump",
+#                 "Bill Gates"
+#             ]
