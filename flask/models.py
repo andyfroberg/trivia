@@ -45,15 +45,3 @@ class TriviaQuestionModel(flask_login.UserMixin, db.Model):
 @login_manager.user_loader
 def load_user(id):
     return UserModel.query.get(int(id))
-
-
-# "category": "General Knowledge",
-#             "type": "multiple",
-#             "difficulty": "easy",
-#             "question": "Virgin Trains, Virgin Atlantic and Virgin Racing, are all companies owned by which famous entrepreneur?   ",
-#             "correct_answer": "Richard Branson",
-#             "incorrect_answers": [
-#                 "Alan Sugar",
-#                 "Donald Trump",
-#                 "Bill Gates"
-#             ]

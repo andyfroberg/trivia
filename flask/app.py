@@ -72,6 +72,7 @@ def addUser(email, username, password):
     user.set_password(password)
     user.email = email
     user.username = username
+    user.score_current_round = 0
     user.score_lifetime = 0
     db.session.add(user)
     db.session.commit()
@@ -90,8 +91,9 @@ def handle_unauthorized_login_attempt():
     flash('Please login to access this page', 'alert-danger')
     return render_template('login.html',form=form)
 
-def load_trivia_question(question_id=None):
-    pass
+def get_trivia_question(question_id=1, category='General Knowledge', 
+                        type='multiple', difficulty='easy'):
+    return TriviaQuestionModel.query.get(question_id)
 
 def get_user_score_current_round():
     load_user()
@@ -118,7 +120,7 @@ def home():
     logged_in, username = verify_user_logged_in()
     return render_template('home.html', logged_in=logged_in, username=username)
 
-@app.route('/login', methods=["POST", "GET"])
+@app.route('/login', methods=['GET', 'POST'])
 def login():
     form = LoginForm()
     if request.method == 'POST':
@@ -180,13 +182,14 @@ def my_trivia():
         logged_in = True
         username = flask_login.current_user.username  #???
         score = flask_login.current_user.score_current_round  #???
-        if answer_form.validate_on_submit():
-            if request.form['answer'].lower() == question[0]['answer'].lower():
-                flask_login.current_user.points += 1
+        question = get_trivia_question()
+        if answer_form.validate_on_submit():  
+            if request.form['answer'].lower() == question.correct_answer.lower():
+                flask_login.current_user.score_current_round += 1
                 db.session.commit()
                 flash('Your answer is correct!', 'alert-success')
             else:
-                flash(f"Your answer is incorrect. The correct answer was {question[0]['answer']}", 'alert-danger')
+                flash(f"Your answer is incorrect. The correct answer was {question.correct_answer}", 'alert-danger')
         user_score = flask_login.current_user.score_current_round
         return render_template('my-trivia.html', answer_form=answer_form, logged_in=logged_in, 
                                username=username, question=question, user_score=user_score)

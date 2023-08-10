@@ -5,8 +5,8 @@
 <div class="row"></div>
     <div class="col-8">
         <h4>Your Score: {{ user_score }}</h4>
-        <h4>Category: {{ question[0]['category'] }}</h4>
-        <h4>{{ question[0]['question'] }}?</h4>
+        <h4>Category: {{ question.category }}</h4>
+        <h4>{{ question.question }}?</h4>
         <form method="post">
             {{ answer_form.csrf_token }}
             <div class="form-outline mb-4">
@@ -17,7 +17,7 @@
                   style="padding-left: 2.5rem; padding-right: 2.5rem;">Submit Answer</button>      
             </div>
           </form>
-        <h4>Answer: {{ question[0]['answer'] }}</h4>
+        <h4>Answer: {{ question.correct_answer }}</h4>
     </div>
 </div>
 
