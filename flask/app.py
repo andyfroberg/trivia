@@ -107,6 +107,9 @@ def get_user_profile():
 # Initialize the login manager
 login_manager.init_app(app)
 
+def validate_form(method, form):
+    return request.method == "POST" and not form.validate_on_submit()
+
 ###############################
 ############ ROUTES ###########
 ###############################
