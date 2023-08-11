@@ -4,7 +4,6 @@ from forms import LoginForm, RegisterForm, PasswordChangeForm, TriviaAnswerForm,
 # from flask_login import login_user, logout_user, login_required, current_user
 import flask_login
 from models import db, login_manager, UserModel, TriviaQuestionModel, load_user #####
-from trivia_db import TriviaDB
 from datetime import datetime
 # import requests
 import json
@@ -45,28 +44,7 @@ with app.app_context():
         db.session.add(question)
         db.session.commit()
 
-###############################
 ##### HELPER FUNCTIONS ########
-###############################
-# def populate_db(path="general_easy_first50.json"):
-#     questions = {}
-#     try:
-#         with open(path) as f:
-#             questions = json.load(f)
-#             print(questions)
-#     except IOError as e:
-#         flash("There was an issue loading the database values.", "alert-danger")
-#         exit(1)
-
-#     for q in questions["results"]:
-#         question = TriviaQuestionModel()
-#         question.category = q["category"]
-#         question.difficulty = q["difficulty"]
-#         question.question = q["question"]
-#         question.correct_answer = q["correct_answer"]
-#         db.session.add(question)
-#         db.session.commit()
-
 def addUser(email, username, password):
     user = UserModel()
     user.set_password(password)
@@ -104,17 +82,13 @@ def get_user_score_lifetime():
 def get_user_profile():
     pass
 
-# populate_db()
-
 # Initialize the login manager
 login_manager.init_app(app)
 
 def validate_form(method, form):
     return request.method == "POST" and not form.validate_on_submit()
 
-###############################
 ############ ROUTES ###########
-###############################
 @app.route('/')
 def home():
     logged_in, username = verify_user_logged_in()
@@ -224,19 +198,15 @@ def change_password():
         user.set_password(new_password)
         db.session.commit()
         return redirect(url_for('reminders', order_by_date=0))
-
     return render_template('change_password.html', passwordChangeForm=passwordChangeForm, logged_in=logged_in, username=username)
 
 
-###############################
 ####### ERROR PAGES ###########
-###############################
 @app.errorhandler(404)
 def page_not_found(error):
     return render_template('404.html'), 404
 
 
 if __name__ == '__main__':
-    # The host is set to '0.0.0.0' to make the app accessible from any IP address.
     # Default flask port (5000) is used in newer macOS releases for sharing features.
     app.run(host='0.0.0.0', debug='false', port=5001)  

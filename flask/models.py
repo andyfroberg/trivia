@@ -36,11 +36,7 @@ class TriviaQuestionModel(flask_login.UserMixin, db.Model):
     # hint = db.Column(db.String(128), nullable=False)
     count_attempted = db.Column(db.Integer)
     count_answered_correctly = db.Column(db.Integer)
-    
 
-# @login_manager.user_loader
-# def load_user(id):
-#     return UserModel.query.get(int(id))
 
 @login_manager.user_loader
 def load_user(id):
