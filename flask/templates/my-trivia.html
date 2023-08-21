@@ -2,23 +2,26 @@
 {% block title %}Home{% endblock title %}
 {% block content %}
 
-<div class="row"></div>
-    <div class="col-8">
-        <h4>Your Score: {{ user_score }}</h4>
-        <h4>Category: {{ question.category }}</h4>
-        <h4>{{ question.question }}?</h4>
-        <form method="post">
-            {{ answer_form.csrf_token }}
-            <div class="form-outline mb-4">
-                {{ answer_form.answer(class="form-control") }}
-            </div>
-            <div class="text-center text-lg-start mt-2 pt-2">
-                <button type="submit" class="btn btn-primary btn-med"
-                  style="padding-left: 2.5rem; padding-right: 2.5rem;">Submit Answer</button>      
-            </div>
-          </form>
-        <h4>Answer: {{ question.correct_answer }}</h4>
+<div class="container">
+    <div class="row align-items-center"></div>
+        <div class="col"></div>
+        <div class=" col-6 ml-auto mr-auto p-5">
+            <h4>Your Score: {{ user_score }}</h4>
+            <h4>Category: {{ question.category }}</h4>
+            <h4>{{ question.question }}?</h4>
+            <form method="post">
+                {{ answer_form.csrf_token }}
+                <div class="form-outline mb-4">
+                    {{ answer_form.answer(class="form-control") }}
+                </div>
+                <div class="text-center text-lg-start mt-2 pt-2">
+                    <button type="submit" class="btn btn-primary btn-med border border-primary border-3 rounded bg-dark fw-bold"
+                    style="padding-left: 2.5rem; padding-right: 2.5rem; color: #FF10F0; text-shadow: #FE89D0 1px 0 8px">SUBMIT ANSWER</button>  
+                </div>
+            </form>
+            <h4>Answer: {{ question.correct_answer }}</h4>
+        </div>
+        <div class="col"></div>
     </div>
 </div>
-
 {% endblock content %}

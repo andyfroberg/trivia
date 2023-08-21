@@ -6,10 +6,10 @@
 </header>
 <main>
   <section class="">
-    <div class="container-fluid h-custom">
+    <div class="container-fluid h-custom bg-black text-white">
       <div class="row d-flex justify-content-center align-items-center h-100">
         <div class="col-md-9 col-lg-6 col-xl-5">
-          <img src="https://th.bing.com/th/id/OIG.qc2bYX14zAWTsnhKOV0T?pid=ImgGnn"
+          <img src="https://trivial-614ce980.s3.amazonaws.com/img/emtpy_bartop_1024w.png"
             class="img-fluid" alt="image">
         </div>
         <div class="col-md-8 col-lg-6 col-xl-4 offset-xl-1">
@@ -26,27 +26,20 @@
             </div>
   
             <!-- Password input -->
-            <div class="col-auto">
+            <div class="col-auto mt-2">
               <small id="passwordHelpId" class="form-text text-muted">Enter password</small>
               {{form.password(class="form-control")}}
             </div>   
   
-            <div class="d-flex justify-content-between align-items-center">
-              <!-- Checkbox -->
-              <div class="form-check mb-0">
-                <input class="form-check-input me-2" type="checkbox" value="" id="remember" />
-                <label class="form-check-label" for="form2Example3">
-                  Remember me
-                </label>
-              </div>
-              <a href="#!" class="text-body">Forgot password?</a>
+            <div class="d-flex justify-content-between align-items-center mt-2">
+              <a href="#!" class="text-white">Forgot password?</a>
             </div>
   
             <div class="text-center text-lg-start mt-4 pt-2">
               <button type="login" class="btn btn-primary btn-lg"
                 style="padding-left: 2.5rem; padding-right: 2.5rem;">Login</button>      
                 <p class="text-muted mt-5 mb-0">Don't have an account? <a href="{{url_for('register')}}"
-                  class="fw-bold text-body"><u>Register</u></a></p> 
+                  class="text-white"><u>Register</u></a></p> 
             </div>
   
           </form>
