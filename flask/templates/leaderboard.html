@@ -1,8 +1,6 @@
 {% extends "base.html" %}
 {% block content %}
-<div class="card-body mt-5" align="center">
-  <p class="card-text"><h2>Leaderboard - Top Trivial Users</h2></p>
-</div>
+<h2 class="mt-5 text-center">Leaderboard - Top Trivial Users</h2>
 <div class="container mt-5">
   <div class="row">
     <div class="col-4">
@@ -23,32 +21,33 @@
 
 <div class="container mt-5 mb-5">
   <div class="row justify-content-start">
-    <div>
-      <table class="table mb-4">
-        <thead>
-          <tr>
-            <th scope="col">No.</th>
-            <th scope="col">Event</th>
-            <th scope="col">Date</th>
-            <th scope="col">Actions</th>
-        </thead>
-        <tbody>
+    <table class="table mb-4">
+      <thead>
+        <tr>
+          <th scope="col">Rank</th>
+          <th scope="col">User</th>
+          <th scope="col">Score</th>
+          <th scope="col">Accuracy</th>
+          <th scope="col">View Profile</th>
+      </thead>
+      <tbody>
         {% if users is not none %}
         {% for user in users %}
-          <tr>
-            <th scope="row">{{ loop.index }}</th>
-            <td>{{ user.username }}</td>
-            <td>{{ user.points }}</td>
-            <td>
-              <form action="{{ url_for('leaderboard') }}" method="GET">
-                <button type="submit" class="btn btn-warning">View Profile</button>
-              </form>
-            </td>
-          </tr>
+        <tr>
+          <th scope="row">{{ loop.index }}</th>
+          <td>{{ user.username }}</td>
+          <td>{{ user.score_current_round }}</td>
+          <td>{{ user.score_lifetime }}</td>
+          <td>
+            <form action="{{ url_for('leaderboard') }}" method="GET">
+              <button type="submit" class="btn btn-warning">View Profile</button>
+            </form>
+          </td>
+        </tr>
           {% endfor %}
           {% endif %}
-        </tbody>
-        </table>
+      </tbody>
+    </table>
   </div>
-
+</div>
 {% endblock content %} 

@@ -86,25 +86,6 @@
             <img src="https://trivial-614ce980.s3.amazonaws.com/logos/trivial_logo_v1_512w.png" alt="Trivial logo" class="img-thumbnail" style="max-width: 150px; background-color: transparent; border: 0;" />
           </a>
         </div>
-
-        <div class="col text-center text-dark">
-          <h6><a href="/" style="font-weight:600; font-size: 1.2em; color: #eee; text-decoration: none;">Home</a></h6>
-          {% if logged_in %}
-          <h6><a href="/my-trivia" style="font-weight:600; font-size: 1.2em; color: #eee; text-decoration: none;">My Trivia</a></h6>
-          {% endif %}
-          {% if not logged_in %}
-          <h6><a href="/register" style="font-weight:600; font-size: 1.2em; color: #eee; text-decoration: none;">Sign Up</a></h6>
-          {% endif %}
-          {% if not logged_in %}
-          <h6><a href="/login" style="font-weight:600; font-size: 1.2em; color: #eee; text-decoration: none;">Log In</a></h6>
-          {% endif %}
-          {% if logged_in %}
-          <h6><a href="/logout" style="font-weight:600; font-size: 1.2em; color: #eee; text-decoration: none;">Log Out</a></h6>
-          {% endif %}
-          {% if logged_in %}
-          <h6></h6><a href="/change_password" style="font-weight:600; font-size: 1.2em; color: #eee; text-decoration: none;">Change Password</a></h6>
-          {% endif %}
-        </div>  
       </div>
     </div>
   </footer>

@@ -3,9 +3,7 @@ from flask import Flask, render_template, request, redirect, url_for, session, f
 from forms import LoginForm, RegisterForm, PasswordChangeForm, TriviaAnswerForm, UserFilterForm
 # from flask_login import login_user, logout_user, login_required, current_user
 import flask_login
-from models import db, login_manager, UserModel, TriviaQuestionModel, load_user #####
-from datetime import datetime
-# import requests
+from models import db, login_manager, UserModel, TriviaQuestionModel, load_user
 import json
 import os
 from dotenv import load_dotenv
@@ -85,8 +83,11 @@ def get_user_profile():
 # Initialize the login manager
 login_manager.init_app(app)
 
-def validate_form(method, form):
-    return request.method == "POST" and not form.validate_on_submit()
+def valid_form(method, form):
+    return request.method == "POST" and form.validate_on_submit()
+
+def get_user(form):
+    return UserModel.query.filter_by(email=form.email.data).first()
 
 ############ ROUTES ###########
 @app.route('/')
@@ -97,21 +98,17 @@ def home():
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     form = LoginForm()
-    if request.method == 'POST':
-        if not form.validate_on_submit():
-            flash('Please enter a valid email and password', 'alert-danger')
-            return render_template('login.html',form=form)
-        user = UserModel.query.filter_by(email=form.email.data).first()
-        if user is None:
-            flash('Please enter a valid email', 'alert-danger')
-            return render_template('login.html',form=form)
-        if not user.check_password(form.password.data):
-            flash('Please enter a valid password', 'alert-danger')
+    if valid_form(request, form):
+        user = get_user(form)
+        if user is None or not user.check_password(form.password.data):
+            flash('Invalid login. Please enter valid login credentials.', 'alert-danger')
             return render_template('login.html',form=form)
         flask_login.login_user(user)
         session['email'] = form.email.data
         return redirect(url_for('my_trivia', order_by_date=0))
-    return render_template("login.html", form=form)
+    else:
+        # flash('Please enter a valid email and password', 'alert-danger')
+        return render_template('login.html',form=form)
 
 @app.route('/logout', methods=['GET', 'POST'])
 def logout():
@@ -165,6 +162,7 @@ def my_trivia():
             else:
                 flash(f"Your answer is incorrect. The correct answer was {question.correct_answer}", 'alert-danger')
         user_score = flask_login.current_user.score_current_round
+        flask_login.current_user.score_lifetime = user_score
         return render_template('my-trivia.html', answer_form=answer_form, logged_in=logged_in, 
                                username=username, question=question, user_score=user_score)
     return render_template("login.html")

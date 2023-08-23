@@ -3,12 +3,12 @@
 {% block content %}
 
 <div class="container">
-    <div class="row align-items-center"></div>
-        <div class="col"></div>
-        <div class=" col-6 ml-auto mr-auto p-5">
+    <div class="row"></div>
+        <div class="col-3"></div>
+        <div class="col-6 align-self-center p-5">
             <h4>Your Score: {{ user_score }}</h4>
             <h4>Category: {{ question.category }}</h4>
-            <h4>{{ question.question }}?</h4>
+            <h4>{{ question.question }}</h4>
             <form method="post">
                 {{ answer_form.csrf_token }}
                 <div class="form-outline mb-4">
@@ -21,7 +21,7 @@
             </form>
             <h4>Answer: {{ question.correct_answer }}</h4>
         </div>
-        <div class="col"></div>
+        <div class="col-3"></div>
     </div>
 </div>
 {% endblock content %}
