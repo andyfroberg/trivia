@@ -196,7 +196,8 @@ def change_password():
         user.set_password(new_password)
         db.session.commit()
         return redirect(url_for('reminders', order_by_date=0))
-    return render_template('change_password.html', passwordChangeForm=passwordChangeForm, logged_in=logged_in, username=username)
+    return render_template('change_password.html', passwordChangeForm=passwordChangeForm, 
+                           logged_in=logged_in, username=username)
 
 
 ####### ERROR PAGES ###########
