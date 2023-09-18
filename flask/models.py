@@ -5,8 +5,10 @@ import werkzeug.security
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime, timedelta
 
+
 db = SQLAlchemy()
 login_manager = flask_login.LoginManager()
+
 
 class UserModel(flask_login.UserMixin, db.Model):
     id = db.Column(db.Integer, unique=True, nullable=False, primary_key=True)
@@ -27,7 +29,8 @@ class UserModel(flask_login.UserMixin, db.Model):
     
     def __repr__(self):  # Add repr, str, etc. dunders for all classes?
         return f'user_id_{self.id}'
-    
+
+
 class TriviaQuestionModel(flask_login.UserMixin, db.Model):
     question_id = db.Column(db.Integer, unique=True, nullable=False, primary_key=True)
     category = db.Column(db.String(64), nullable=False)
@@ -37,6 +40,7 @@ class TriviaQuestionModel(flask_login.UserMixin, db.Model):
     # hint = db.Column(db.String(128), nullable=False)
     count_attempted = db.Column(db.Integer)
     count_answered_correctly = db.Column(db.Integer)
+
 
 @login_manager.user_loader
 def load_user(id):

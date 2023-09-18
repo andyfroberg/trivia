@@ -90,7 +90,7 @@
             "type": "multiple",
             "difficulty": "easy",
             "question": "How would one say goodbye in Spanish?",
-            "correct_answer": "Adi&oacute;s",
+            "correct_answer": "Adios",
             "incorrect_answers": [
                 " Hola",
                 "Au Revoir",
@@ -125,7 +125,7 @@
             "category": "General Knowledge",
             "type": "multiple",
             "difficulty": "easy",
-            "question": "What does the &#039;S&#039; stand for in the abbreviation SIM, as in SIM card? ",
+            "question": "What does the 'S'; stand for in the abbreviation SIM, as in SIM card? ",
             "correct_answer": "Subscriber",
             "incorrect_answers": [
                 "Single",
@@ -137,7 +137,7 @@
             "category": "General Knowledge",
             "type": "multiple",
             "difficulty": "easy",
-            "question": "What word represents the letter &#039;T&#039; in the NATO phonetic alphabet?",
+            "question": "What word represents the letter 'T' in the NATO phonetic alphabet?",
             "correct_answer": "Tango",
             "incorrect_answers": [
                 "Target",
@@ -161,7 +161,7 @@
             "category": "General Knowledge",
             "type": "multiple",
             "difficulty": "easy",
-            "question": "What is &quot;dabbing&quot;?",
+            "question": "What is 'dabbing'?",
             "correct_answer": "A dance",
             "incorrect_answers": [
                 "A medical procedure",
@@ -173,7 +173,7 @@
             "category": "General Knowledge",
             "type": "multiple",
             "difficulty": "easy",
-            "question": "What is the shape of the toy invented by Hungarian professor Ern\u0151 Rubik?",
+            "question": "What is the shape of the toy invented by Hungarian professor Rubik?",
             "correct_answer": "Cube",
             "incorrect_answers": [
                 "Sphere",
@@ -221,7 +221,7 @@
             "category": "General Knowledge",
             "type": "multiple",
             "difficulty": "easy",
-            "question": "What is the Spanish word for &quot;donkey&quot;?",
+            "question": "What is the Spanish word for 'donkey'?",
             "correct_answer": "Burro",
             "incorrect_answers": [
                 "Caballo",
