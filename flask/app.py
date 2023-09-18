@@ -50,6 +50,7 @@ def addUser(email, username, password):
     user.username = username
     user.score_current_round = 0
     user.score_lifetime = 0
+    user.current_question = 1
     db.session.add(user)
     db.session.commit()
 
@@ -67,9 +68,14 @@ def handle_unauthorized_login_attempt():
     flash('Please login to access this page', 'alert-danger')
     return render_template('login.html',form=form)
 
-def get_trivia_question(question_id=1, category='General Knowledge', 
+def get_trivia_question(user=None, question_id=1, category='General Knowledge', 
                         type='multiple', difficulty='easy'):
-    return TriviaQuestionModel.query.get(question_id)
+    if user:
+        user.current_question += 1
+        db.session.commit()
+        return TriviaQuestionModel.query.get(user.current_question)
+    else:
+        flash("You must be logged in to use this feature.")
 
 def get_user_score_current_round():
     load_user()
@@ -97,7 +103,7 @@ def home():
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-    form = LoginForm()
+    form = LoginForm(formdata=None)
     if valid_form(request, form):
         user = get_user(form)
         if user is None or not user.check_password(form.password.data):
@@ -111,6 +117,7 @@ def login():
         return render_template('login.html',form=form)
 
 @app.route('/logout', methods=['GET', 'POST'])
+@flask_login.login_required
 def logout():
     flask_login.logout_user()
     session.pop('email', None)
@@ -119,7 +126,7 @@ def logout():
 @app.route('/register', methods=["GET", "POST"])
 def register():
     logged_in, username = verify_user_logged_in()
-    form = RegisterForm()
+    form = RegisterForm(formdata=None)
     if request.method == 'POST':
         if not form.validate_on_submit():
             if form.password.data != form.confirmPassword.data:
@@ -144,32 +151,31 @@ def register():
             return render_template('register.html',form=form)    
     return render_template('register.html',form=form, logged_in=logged_in, username=username)
 
+
 @app.route('/my-trivia', methods=['GET', 'POST'])
+@flask_login.login_required
 def my_trivia():
-    answer_form = TriviaAnswerForm()
-    logged_in = False
-    username = None
-    if flask_login.current_user.is_authenticated:
-        logged_in = True
-        username = flask_login.current_user.username  #???
-        score = flask_login.current_user.score_current_round  #???
-        question = get_trivia_question()
-        if answer_form.validate_on_submit():  
-            if request.form['answer'].lower() == question.correct_answer.lower():
-                flask_login.current_user.score_current_round += 1
-                db.session.commit()
-                flash('Your answer is correct!', 'alert-success')
-            else:
-                flash(f"Your answer is incorrect. The correct answer was {question.correct_answer}", 'alert-danger')
-        user_score = flask_login.current_user.score_current_round
-        flask_login.current_user.score_lifetime = user_score
-        return render_template('my-trivia.html', answer_form=answer_form, logged_in=logged_in, 
-                               username=username, question=question, user_score=user_score)
-    return render_template("login.html")
+    user = UserModel.query.filter_by(username=flask_login.current_user.username).first()
+    answer_form = TriviaAnswerForm(formdata=None)
+    answer = None
+    question = TriviaQuestionModel.query.get(user.current_question)
+    if answer_form.validate_on_submit(): 
+        answer = request.form['answer']
+        if answer.lower() == question.correct_answer.lower():
+            user.score_lifetime += 1
+            db.session.commit()
+            flash('Your answer is correct!', 'alert-success')
+        else:
+            flash(f"Your answer is incorrect. The correct answer was {question.correct_answer}", 'alert-danger')
+    if request.method == 'POST':  # Populate new question if the user submits an answer to the current question
+        question = question = get_trivia_question(user)
+    return render_template('my-trivia.html', answer_form=answer_form, logged_in=True, 
+                        username=user.username, question=question, user_score=user.score_lifetime)
+
 
 @app.route('/leaderboard', methods=['GET', 'POST'])
 def leaderboard():
-    user_filter_form = UserFilterForm()
+    user_filter_form = UserFilterForm(formdata=None)
     users = UserModel.query.all()
     logged_in, username = verify_user_logged_in()
     # Check if the user has searched for an event by title
@@ -184,13 +190,32 @@ def leaderboard():
     return render_template('leaderboard.html', user_filter_form=user_filter_form, users=users, 
                            logged_in=logged_in, username=username)
 
+# @app.route('/leaderboard', methods=['GET', 'POST'])
+# @flask_login.login_required
+# def leaderboard():
+#     logged_in = True
+#     username = flask_login.current_user.username
+#     user_filter_form = UserFilterForm()
+#     users = UserModel.query.all()
+#     # Check if the user has searched for an event by title
+#     if user_filter_form.validate_on_submit():
+#         filtered_users = []
+#         for user in users:
+#             if request.form['query'].lower() in str(user.username).lower():
+#                 filtered_users.append(user)
+#             users = filtered_users
+#         return render_template('leaderboard.html', user_filter_form=user_filter_form, users=users, 
+#                                logged_in=logged_in, username=username)
+#     return render_template('leaderboard.html', user_filter_form=user_filter_form, users=users, 
+#                            logged_in=logged_in, username=username)
+
 @app.route('/change_password', methods=["GET", "POST"])
+@flask_login.login_required
 def change_password():
+    logged_in = True
+    username = flask_login.current_user.username
     passwordChangeForm = PasswordChangeForm()
-    if flask_login.current_user.is_authenticated:
-        logged_in = True
-        username = flask_login.current_user.username
-        user = UserModel.query.filter_by(username=username).first()
+    user = UserModel.query.filter_by(username=username).first()
     if passwordChangeForm.validate_on_submit() and logged_in:
         new_password = request.form['newPassword']
         user.set_password(new_password)

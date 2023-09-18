@@ -12,7 +12,7 @@
             <form method="post">
                 {{ answer_form.csrf_token }}
                 <div class="form-outline mt-4 mb-4">
-                    {{ answer_form.answer(class="form-control") }}
+                    {{ answer_form.answer(class="form-control", autofocus=true) }}
                 </div>
                 <div class="text-center text-lg-start mt-2 pt-2">
                     <button type="submit" class="btn btn-primary btn-med border border-primary border-3 rounded bg-dark fw-bold"

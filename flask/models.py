@@ -13,6 +13,7 @@ class UserModel(flask_login.UserMixin, db.Model):
     email = db.Column(db.String(50), unique=True, nullable=False)
     username = db.Column(db.String(50), nullable=False)
     password_hash = db.Column(db.String(128), nullable=False)
+    current_question = db.Column(db.Integer, nullable=False)
     score_current_round = db.Column(db.Integer)
     score_lifetime = db.Column(db.Integer)
     profile_picture = db.Column(db.String(128))  # URI to image stored in s3
@@ -36,7 +37,6 @@ class TriviaQuestionModel(flask_login.UserMixin, db.Model):
     # hint = db.Column(db.String(128), nullable=False)
     count_attempted = db.Column(db.Integer)
     count_answered_correctly = db.Column(db.Integer)
-
 
 @login_manager.user_loader
 def load_user(id):
