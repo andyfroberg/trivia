@@ -52,6 +52,7 @@ def addUser(email, username, password):
     user.score_current_round = 0
     user.score_lifetime = 0
     user.current_question = 1
+    user.questions_attempted = 0
     db.session.add(user)
     db.session.commit()
 
@@ -75,7 +76,7 @@ def handle_unauthorized_login_attempt():
 def get_trivia_question(user=None, question_id=1, category='General Knowledge', 
                         type='multiple', difficulty='easy'):
     if user:
-        user.current_question += 1
+        user.current_question += 1  # FIX // HANDLE OUT OF BOUNDS 
         db.session.commit()
         return TriviaQuestionModel.query.get(user.current_question)
     else:
@@ -133,7 +134,7 @@ def register():
         user = get_user(flask_login.current_user)
         flash('You have already signed up for an acount.', 'alert-danger')
         return redirect(url_for('my_trivia'))
-    form = RegisterForm(formdata=None)
+    form = RegisterForm()
     if request.method == 'POST':
         if not form.validate_on_submit():
             if form.password.data != form.confirmPassword.data:
@@ -163,26 +164,29 @@ def register():
 @flask_login.login_required
 def my_trivia():
     user = UserModel.query.filter_by(username=flask_login.current_user.username).first()
-    answer_form = TriviaAnswerForm(formdata=None)
+    answer_form = TriviaAnswerForm()
     answer = None
     question = TriviaQuestionModel.query.get(user.current_question)
     if answer_form.validate_on_submit(): 
+        user.questions_attempted += 1
         answer = request.form['answer']
         if answer.lower() == question.correct_answer.lower():
             user.score_lifetime += 1
             db.session.commit()
+            answer_form = TriviaAnswerForm(formdata=None)  # Clear form for reload with new form instance
             flash('Your answer is correct!', 'alert-success')
         else:
             flash(f"Your answer is incorrect. The correct answer was {question.correct_answer}", 'alert-danger')
     if request.method == 'POST':  # Populate new question if the user submits an answer to the current question
         question = question = get_trivia_question(user)
+    print(user.score_lifetime)
     return render_template('my-trivia.html', answer_form=answer_form, logged_in=True, 
                         username=user.username, question=question, user_score=user.score_lifetime)
 
 
 @app.route('/leaderboard', methods=['GET', 'POST'])
 def leaderboard():
-    user_filter_form = UserFilterForm(formdata=None)
+    user_filter_form = UserFilterForm()
     users = UserModel.query.all()
     logged_in, username = verify_user_logged_in()
     # Check if the user has searched for an event by title

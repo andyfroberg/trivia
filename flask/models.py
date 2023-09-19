@@ -18,6 +18,7 @@ class UserModel(flask_login.UserMixin, db.Model):
     current_question = db.Column(db.Integer, nullable=False)
     score_current_round = db.Column(db.Integer)
     score_lifetime = db.Column(db.Integer)
+    questions_attempted = db.Column(db.Integer)
     profile_picture = db.Column(db.String(128))  # URI to image stored in s3
     profile_bio = db.Column(db.String(512))
     

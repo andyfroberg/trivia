@@ -26,9 +26,8 @@
         <tr>
           <th scope="col">Rank</th>
           <th scope="col">User</th>
-          <th scope="col">Score</th>
+          <th scope="col">Questions Answered</th>
           <th scope="col">Accuracy</th>
-          <th scope="col">View Profile</th>
       </thead>
       <tbody>
         {% if users is not none %}
@@ -36,13 +35,12 @@
         <tr>
           <th scope="row">{{ loop.index }}</th>
           <td>{{ user.username }}</td>
-          <td>{{ user.score_current_round }}</td>
           <td>{{ user.score_lifetime }}</td>
-          <td>
-            <form action="{{ url_for('leaderboard') }}" method="GET">
-              <button type="submit" class="btn btn-warning">View Profile</button>
-            </form>
-          </td>
+          {% if user.questions_attempted > 0 %}
+          <td>{{ ((user.score_lifetime / user.questions_attempted) * 100)|round|int }}%</td>
+          {% else %}
+          <td>"-"</td>
+          {% endif %}
         </tr>
           {% endfor %}
           {% endif %}
