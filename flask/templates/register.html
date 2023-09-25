@@ -3,14 +3,14 @@
 {% block content %}
 <main>
   <section class="vh-80 bg-image"
-  style="background-image: url('https://th.bing.com/th/id/OIG.eX8H7hMZTM4c9m.r98p8?pid=ImgGn'); 
+  style="background-image: url('https://trivial-614ce980.s3.amazonaws.com/img/emtpy_bartop_1024w.png'); 
   background-position: center; background-repeat: no-repeat; background-size: cover;">
     <div class="container h-100 p-5">
       <div class="row d-flex justify-content-center align-items-center h-100">
         <div class="col-xl-5">
-          <div class="card" style="border-radius: 15px;">
+          <div class="card bg-black text-white" style="border-radius: 15px;">
             <div class="card-body p-4">
-              <h2 class="text-uppercase text-center mb-4">Create an account</h2>
+              <h2 class="text-uppercase text-center mb-4" style="color: #FF10F0; text-shadow: #FE89D0 1px 0 8px;">Create an account</h2>
 
               <form method="post">
                 {{ form.csrf_token }}
@@ -21,22 +21,22 @@
 
                 <div class="form-outline mb-4">
                   {{form.email(class="form-control")}}
-                  <label class="form-label" for="form3Example3cg">Your Email</label>
+                  <label class="form-label" for="form3Example3cg" style="color: #FF10F0; text-shadow: #FE89D0 1px 0 8px; font-weight: bold;">Your Email</label>
                 </div>
 
                 <div class="form-outline mb-4">
                   {{form.username(class="form-control")}}
-                  <label class="form-label" for="form3Example3cg">Your Username</label>
+                  <label class="form-label" for="form3Example3cg" style="color: #FF10F0; text-shadow: #FE89D0 1px 0 8px; font-weight: bold;">Your Username</label>
                 </div>
 
                 <div class="form-outline mb-4">
                   {{form.password(class="form-control")}}
-                  <label class="form-label" for="form3Example4cg">Password</label>
+                  <label class="form-label" for="form3Example4cg" style="color: #FF10F0; text-shadow: #FE89D0 1px 0 8px; font-weight: bold;">Password</label>
                 </div>
 
                 <div class="form-outline mb-4">
                   {{form.confirmPassword(class="form-control")}}
-                  <label class="form-label" for="form3Example4cdg">Re-enter your password</label>
+                  <label class="form-label" for="form3Example4cdg" style="color: #FF10F0; text-shadow: #FE89D0 1px 0 8px; font-weight: bold;">Re-enter your password</label>
                 </div>
 
 
